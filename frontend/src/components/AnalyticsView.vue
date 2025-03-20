@@ -104,6 +104,8 @@ export default {
 
     const getWordCountBarWidth = () => {
       const percentage = (maxWordNote.value / analytics.value.total_word_count) * 100;
+      console.log(maxWordNote.value);
+      console.log(analytics.value.total_word_count);
       console.log(maxWordNote.value / analytics.value.total_word_count) * 100;
       return `${Math.min(percentage, 100)}%`;
     };

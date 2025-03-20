@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from models.note_version import NoteVersion
@@ -28,11 +28,16 @@ def create_note(note: NoteSchema, db: Session = Depends(get_db)):
 @router.get("/notes/{id}")
 def get_note_by_id(id: int, db: Session = Depends(get_db)):
     note = db.query(Note).filter(Note.id == id).first()
+    if not note:
+        raise HTTPException(status_code=404, detail="Note not found")
     return note
 
 @router.put("/notes/{id}")
 def update_note(note: NoteSchema, db: Session = Depends(get_db)):
     edited_note = db.query(Note).filter(Note.id == note.id).first()
+    
+    if not edited_note:
+        raise HTTPException(status_code=404, detail="Note not found")
     
     note_version = NoteVersion(note_id=edited_note.id, name=edited_note.name, description=edited_note.description)
     db.add(note_version)
@@ -47,6 +52,8 @@ def update_note(note: NoteSchema, db: Session = Depends(get_db)):
 @router.delete("/notes/{id}")
 def delete_note(id: int, db: Session = Depends(get_db)):
     note = db.query(Note).filter(Note.id == id).first()
+    if not note:
+        raise HTTPException(status_code=404, detail="Note not found")
     name = note.name
     db.delete(note)
     db.commit()
@@ -55,6 +62,10 @@ def delete_note(id: int, db: Session = Depends(get_db)):
 @router.post("/notes/summarize/{id}")
 def summarize_note_by_id(id: int, db: Session = Depends(get_db)):
     note = db.query(Note).filter(Note.id == id).first()
+    
+    if not note:
+        raise HTTPException(status_code=404, detail="Note not found")
+    
     summary = summarize(note.description)
     return summary
 

@@ -41,6 +41,11 @@ def test_get_note_by_id(client):
     response = client.get(f"/notes/{note_id}")
     assert response.status_code == 200
     assert response.json()["name"] == "Note 1"
+    
+def test_get_note_by_id_404(client):
+    response = client.get("/notes/999")
+    assert response.status_code == 404
+    assert "Note not found" in response.json()["detail"]
 
 def test_update_note(client):
     create_response = client.post("/notes", json={"name": "Old Name", "description": "Old Description"})
@@ -48,6 +53,11 @@ def test_update_note(client):
     response = client.put(f"/notes/{note_id}", json={"id": note_id, "name": "Updated Name", "description": "Updated Description"})
     assert response.status_code == 200
     assert response.json()["name"] == "Updated Name"
+    
+def test_update_note_404(client):
+    response = client.put("/notes/999", json={"id": 999, "name": "Updated Name", "description": "Updated Description"})
+    assert response.status_code == 404
+    assert "Note not found" in response.json()["detail"]
 
 def test_delete_note(client):
     create_response = client.post("/notes", json={"name": "To Delete", "description": "Delete me"})
@@ -56,12 +66,22 @@ def test_delete_note(client):
     assert response.status_code == 200
     assert "has been deleted" in response.json()["message"]
     
+def test_delete_note_404(client):
+    response = client.delete("/notes/999")
+    assert response.status_code == 404
+    assert "Note not found" in response.json()["detail"]
+    
 def test_summarize_note_by_id(client):
     create_response = client.post("/notes", json={"name": "Summarize", "description": "This is a long text that needs to be summarized"})
     note_id = create_response.json()["id"]
     response = client.post(f"/notes/summarize/{note_id}")
     assert response.status_code == 200
     assert isinstance(response.json(), str)
+    
+def test_summarize_note_by_id_404(client):
+    response = client.post("/notes/summarize/999")
+    assert response.status_code == 404
+    assert "Note not found" in response.json()["detail"]
     
 def test_get_analytics(client):
     response = client.get("/analytics")
