@@ -11,7 +11,7 @@ Firstly, create .env file in the backend directory and set the following values:
 GEMINI_API_KEY =
 ```
 
-To start the bot using Docker and docker-compose, run:
+To start the app using Docker and docker-compose, run:
 ```
 docker-compose up --build
 ```
