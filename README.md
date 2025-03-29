@@ -1,12 +1,12 @@
 # Notes App
 
-This application allows you to create, edit, delete notes and summarize them using AI. The application uses Gemini API to summarize the notes. There is also an analytics page that shows statistics about the notes.
+This application allows you to create, edit, and delete notes and summarize them using AI. It uses the Gemini API to summarize the notes. There is also an analytics page that shows statistics about the notes.
 
 ![Home page](/images/home.png)
 
 ## 🚀 Launch
 
-Firstly, create .env file in the backend directory and set the following values:
+Firstly, create an .env file in the backend directory and set the following values:
 ```
 GEMINI_API_KEY =
 ```
@@ -33,7 +33,7 @@ docker-compose up --build
 
 ‼️ TESTS SHOULD RUN ONLY INSIDE THE CONTAINER ‼️
 
-After starting the application, you need to know the container id of the backend container. You can find it by running the following command:
+After starting the application, you need to know the container ID of the backend container. You can find it by running the following command:
 ```
 docker ps
 ```
@@ -50,4 +50,4 @@ pytest app/tests.py
 
 ## 📩 Feedback
 
-If you have any suggestions or find any issues, feel free to contact me.
+Feel free to contact me if you have any suggestions or issues.
